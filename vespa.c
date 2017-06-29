@@ -1,3 +1,8 @@
+/*--------------------------------------------------------------------------------
+ * This C programm is to execute Velocity Spectral Analysis (Vespagram or Vespa) *
+ * 2017-6-29  Initially coded by Xuping Feng @NJU                                *
+ * ------------------------------------------------------------------------------*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
