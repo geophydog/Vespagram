@@ -24,33 +24,39 @@ void no_spa(char *ps) {
     *pt = '\0';
 }
 
+float sign( float x ) {
+    if ( x >= 0. ) return 1.;
+    else return -1.;
+}
+
 /*----------------------------------------------------------------------------MAIN PROGRAM-------------------------------------------------------------------*/
 int main( int argc, char *argv[] ) {
     int i, j, size = 256, sac_npts, shift_index, count = 0, sta_index = 0;
-    float *data, f1, f2, time, center_lon = 0., center_lat = 0., dx, dy, shift_time, delta,time_start, time_end, **allamp, **coordi, *amp;
+    float *data, f1, f2, Nth_root, time, center_lon = 0., center_lat = 0., dx, dy, shift_time, delta,time_start, time_end, **allamp, **coordi, *amp;
     SACHEAD hd;
     char *ss, *slow = {"slow"}, *backazimuth = {"baz"};
     FILE *fin, *fout, *fbp, *fp;
 
-    if ( argc != 10 ) {
-        fprintf(stderr,"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-        fprintf(stderr,"++     USAGE: vespa <filelist> <f1> <f2> <ID:slow/baz> <slow/baz> <slow_low/baz_low> <slow_high/baz_high> <step_len> <output>   ++\n");
-        fprintf(stderr,"++            return output_results of 3 columns: col1: time; col2: slowness/backazimuth col3: amplitude                        ++\n");
-        fprintf(stderr,"++            <filelist>           [1] file containing every SAC format file                                                    ++\n");
-        fprintf(stderr,"++            <f1>                 [2] low limitation of corner frequency of bandpass filter                                    ++\n");
-        fprintf(stderr,"++            <f2>                 [3] high limitation of corner frequency of bandpass filter                                   ++\n");
-        fprintf(stderr,"++            <ID:slow/baz>        [4] \"slow\" or \"baz\", which means fix slowness/baz and scan baz/slowness                      ++\n");
-        fprintf(stderr,"++            <slow/baz>           [5] fixed slowness/backazimuth                                                               ++\n");
-        fprintf(stderr,"++            <slow_low/baz_low>   [6] low limitation of scanning sloness or backazimuth                                        ++\n");
-        fprintf(stderr,"++            <slow_high/baz_high> [7] high limitation of scanning slowness or backazimuth                                      ++\n");
-        fprintf(stderr,"++            <step_len>           [8] step length of scanning slowness/backazimuth                                             ++\n");
-        fprintf(stderr,"++            <output>             [9] file saving outputting results: col1: time col2: slowness/baz col3: amplitude            ++\n");
-        fprintf(stderr,"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    if ( argc != 11 ) {
+        fprintf(stderr,"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+        fprintf(stderr,"++    USAGE: vespa <filelist> <f1> <f2> <ID:slow/baz> <slow/baz> <slow_low/baz_low> <slow_high/baz_high> <step_len> <Nth_root> <output>   ++\n");
+        fprintf(stderr,"++            return output_results of 3 columns: col1: time; col2: slowness/backazimuth col3: amplitude                                  ++\n");
+        fprintf(stderr,"++            <filelist>           [1] file containing every SAC format file                                                              ++\n");
+        fprintf(stderr,"++            <f1>                 [2] low limitation of corner frequency of bandpass filter                                              ++\n");
+        fprintf(stderr,"++            <f2>                 [3] high limitation of corner frequency of bandpass filter                                             ++\n");
+        fprintf(stderr,"++            <ID:slow/baz>        [4] \"slow\" or \"baz\", which means fix slowness/baz and scan baz/slowness                                ++\n");
+        fprintf(stderr,"++            <slow/baz>           [5] fixed slowness/backazimuth                                                                         ++\n");
+        fprintf(stderr,"++            <slow_low/baz_low>   [6] low limitation of scanning sloness or backazimuth                                                  ++\n");
+        fprintf(stderr,"++            <slow_high/baz_high> [7] high limitation of scanning slowness or backazimuth                                                ++\n");
+        fprintf(stderr,"++            <step_len>           [8] step length of scanning slowness/backazimuth                                                       ++\n");
+        fprintf(stderr,"++            <Nth_root>           [9] Nth root slant-stacking, here specially, N consistant with 1 means linear stacking                 ++\n");
+        fprintf(stderr,"++            <output>             [10]file saving outputting results: col1: time col2: slowness/baz col3: amplitude                      ++\n");
+        fprintf(stderr,"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
         exit(1);
     }
 
-    fin = fopen(argv[1],"r"); fout = fopen(argv[9],"w"); fp = fopen("plot.sh","w");
-    f1 = atof(argv[2]); f2 = atof(argv[3]); ss = (char*) malloc(size);
+    fin = fopen(argv[1],"r"); fout = fopen(argv[10],"w"); fp = fopen("plot.sh","w");
+    f1 = atof(argv[2]); f2 = atof(argv[3]); ss = (char*) malloc(size); Nth_root = atof(argv[10]);
 
     time_start = clock();
     while ( fgets(ss, size, fin) ) {
@@ -102,7 +108,7 @@ int main( int argc, char *argv[] ) {
                 dx = center_lon - coordi[i][0]; dy = center_lat - coordi[i][1];
                 shift_time = slow_x * dx + slow_y * dy; shift_index = (int) (shift_time/delta);
                 for ( j = 0; j < sac_npts; j ++ ) {
-                    if ( j + shift_index >= 0 && j + shift_index < sac_npts ) amp[j] += allamp[i][j+shift_index]/count;
+                    if ( j + shift_index >= 0 && j + shift_index < sac_npts ) amp[j] += sign(allamp[i][j+shift_index])*pow(allamp[i][j+shift_index],Nth_root)/count;
                     else amp[j] = 0.;
                 }
             }
@@ -126,7 +132,7 @@ int main( int argc, char *argv[] ) {
                 dx = center_lon - coordi[i][0]; dy = center_lat - coordi[i][1];
                 shift_time = slow_x * dx + slow_y * dy; shift_index = (int) (shift_time/delta);
                 for ( j = 0; j < sac_npts; j ++ ) {
-                    if ( (j + shift_index >= 0) && (j + shift_index < sac_npts) ) amp[j] += allamp[i][j+shift_index]/count;
+                    if ( (j + shift_index >= 0) && (j + shift_index < sac_npts) ) amp[j] += sign(allamp[i][j+shift_index])*pow(allamp[i][j+shift_index],Nth_root)/count;
                     else amp[j] += 0.;
                 }
             }
