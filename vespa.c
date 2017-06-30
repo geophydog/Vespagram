@@ -123,12 +123,12 @@ int main( int argc, char *argv[] ) {
         }
     /*----------------------------------------------------Scanning backazimuth:save plot script in file "plot.sh"----------------------- -----------*/
     fprintf(fp,"R=%f/%f/%f/%f\n", t1, t2, baz_low, baz_high);
-    fprintf(fp,"J=X9i/7i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
+    fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
     fprintf(fp,"gmt surface %s -R$R -I%f/%f -G%s.grd\n", argv[12], delta*10, baz_step/2, argv[12]);
     fprintf(fp,"gmt grd2cpt %s.grd -Cjet -Z>tmp.cpt\n", argv[12]);
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
     fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Backazimuth(deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), baz_high/10);
-    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3.5i/15/0.8 -Ba0.4:\"Spectral Power\":>>$PS\n");
+    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.4:\"Spectral Power\":>>$PS\n");
     fprintf(fp,"gmt psxy -R -J -O -T>>$PS\nps2pdf $PS $PDF\n");
     fprintf(fp,"rm tmp.* gmt.*\n"); fprintf(fp,"evince $PDF\n");
     fclose(fp);
@@ -160,12 +160,12 @@ int main( int argc, char *argv[] ) {
         }
     /*----------------------------------------------------Scanning slowness:save plot script in file "plot.sh"--------------------------------------*/
     fprintf(fp,"R=%f/%f/%f/%f\n", t1, t2, slow_low, slow_high);
-    fprintf(fp,"J=X9i/7i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
+    fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
     fprintf(fp,"gmt surface %s -R$R -I%f/%f -G%s.grd\n", argv[12], delta*10, slow_step/2, argv[12]);
     fprintf(fp,"gmt grd2cpt %s.grd -Cjet -Z>tmp.cpt\n", argv[12]);
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
-    fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Slowness(sec/deg)\" -BWSen>>$PS\n", argv[12], (int)((t2-t1)/10), slow_high/10);
-    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3.5i/15/0.8 -Ba0.4:\"Spectral Power\":>>$PS\n");
+    fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Slowness(sec/deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), slow_high/10);
+    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.4:\"Spectral Power\":>>$PS\n");
     fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n"); fprintf(fp,"ps2pdf $PS $PDF\n");
     fprintf(fp,"rm tmp.* gmt.*\n"); fprintf(fp,"evince $PDF\n");
     fclose(fp);
