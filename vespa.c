@@ -53,6 +53,8 @@ int main( int argc, char *argv[] ) {
         fprintf(stderr,"++            <step_len>           [10] step length of scanning slowness/backazimuth                                                                 ++\n");
         fprintf(stderr,"++            <Nth_root>           [11] Nth root slant-stacking, here specially, N consistant with 1 means linear stacking                           ++\n");
         fprintf(stderr,"++            <output>             [12] file saving outputting results: col1: time col2: slowness/baz col3: amplitude                                ++\n");
+        fprintf(stderr,"++                                 ATTENTION!!! Executing VESPA requires SAC(Seismic Analysis Code) to filter with bandpass                          ++\n");
+        fprintf(stderr,"++                                              Executing plot.sh requires GMT(the Generic Mapping Tools) with primary version 5,here 5.3.1          ++\n");
         fprintf(stderr,"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
         exit(1);
     }
