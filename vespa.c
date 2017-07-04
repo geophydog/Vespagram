@@ -31,10 +31,11 @@ float sign( float x ) {
 
 /*----------------------------------------------------------------------------MAIN PROGRAM-------------------------------------------------------------------*/
 int main( int argc, char *argv[] ) {
-    int i, j, size = 256, sac_npts, shift_index, count = 0, sta_index = 0, begin_index, end_index, beam_npts;
-    float *data, t1, t2, f1, f2, Nth_root, time, center_lon = 0., center_lat = 0., dx, dy, shift_time, delta,time_start, time_end, **allamp, **coordi, *beam;
+    int i, j, size = 256, sac_npts, shift_index, count = 0, sta_index = 0, begin_index, end_index, beam_npts, cc = 0;
+    float *data, t1, t2, f1, f2, Nth_root, time, center_lon = 0., center_lat = 0., dx, dy, shift_time, delta,\
+          time_start, time_end, **allamp, **coordi, *beam, peak = 0., tmp1, tmp2;
     SACHEAD hd;
-    char *ss, *slow = {"slow"}, *backazimuth = {"baz"};
+    char *ss, *slow = {"slow"}, *backazimuth = {"baz"}, ch[20];
     FILE *fin, *fout, *fbp, *fp;
 
     if ( argc != 13 ) {
@@ -108,17 +109,22 @@ int main( int argc, char *argv[] ) {
         while ( baz_scan <= baz_high ) {
             for ( i = 0; i < beam_npts; i ++ ) beam[i] = 0.;
             for ( i = 0; i < count ; i++ ) {
-                slow_x = slowness * cos( (90-baz_scan)/180.*PI ); slow_y = slowness * sin( (90-baz_scan)/180.*PI );
+                slow_x = slowness * cos( (90.-baz_scan)/180.*PI ); slow_y = slowness * sin( (90.-baz_scan)/180.*PI );
                 dx = center_lon - coordi[i][0]; dy = center_lat - coordi[i][1];
                 shift_time = slow_x * dx + slow_y * dy; shift_index = (int) (shift_time/delta);
                 for ( j = 0; j < beam_npts; j ++ ) {
-                    if ( (begin_index + j + shift_index >= 0) && (begin_index + j + shift_index < sac_npts) )
-                        beam[j] += sign(allamp[i][begin_index+j+shift_index])*pow(allamp[i][begin_index+j+shift_index],Nth_root)/count;
-                    else beam[j] = 0.;
+                    if ( (begin_index + j + shift_index) >= 0 && (begin_index + j + shift_index) < sac_npts ) {
+                        tmp1 = sign(allamp[i][begin_index+j+shift_index])*pow(fabs(allamp[i][begin_index+j+shift_index]),1./Nth_root)/count;
+                        beam[j] += tmp1;
+                    }
+                    else beam[j] += 0.;
                 }
             }
             for ( j = 0; j < beam_npts; j ++ ) {
                 time = t1 + j * delta;
+                tmp2 = sign(beam[j])*pow(fabs(beam[j]),Nth_root);
+                beam[j] = tmp2;
+                if ( peak < fabs(beam[j]) ) peak = fabs(beam[j]);
                 fprintf(fout, "%f %f %f\n", time, baz_scan, fabs(beam[j]));
             }
             baz_scan += baz_step;
@@ -126,11 +132,12 @@ int main( int argc, char *argv[] ) {
     /*----------------------------------------------------Scanning backazimuth:save plot script in file "plot.sh"----------------------- -----------*/
     fprintf(fp,"R=%f/%f/%f/%f\n", t1, t2, baz_low, baz_high);
     fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
-    fprintf(fp,"gmt surface %s -R$R -I%f/%f -G%s.grd\n", argv[12], delta*10, baz_step/2, argv[12]);
-    fprintf(fp,"gmt grd2cpt %s.grd -Cjet -Z>tmp.cpt\n", argv[12]);
+    fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
+    fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, baz_step/2, argv[12]);
+    fprintf(fp,"gmt makecpt -Cjet -T0/1.0/0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
     fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Backazimuth(deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), baz_high/10);
-    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.4:\"Spectral Power\":>>$PS\n");
+    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.1:\"Normalized Spectral Power\":>>$PS\n");
     fprintf(fp,"gmt psxy -R -J -O -T>>$PS\nps2pdf $PS $PDF\n");
     fprintf(fp,"gmt psconvert -Tg -A -P $PS\n");
     fprintf(fp,"rm tmp.* gmt.*\n"); fprintf(fp,"evince $PDF\n");
@@ -150,25 +157,36 @@ int main( int argc, char *argv[] ) {
                 dx = center_lon - coordi[i][0]; dy = center_lat - coordi[i][1];
                 shift_time = slow_x * dx + slow_y * dy; shift_index = (int) (shift_time/delta);
                 for ( j = 0; j < beam_npts; j ++ ) {
-                    if ( (begin_index + j + shift_index >= 0) && (begin_index + j + shift_index < sac_npts) )
-                        beam[j] += sign(allamp[i][begin_index+j+shift_index])*pow(allamp[i][begin_index+j+shift_index],Nth_root)/count;
+                    if ( (begin_index + j + shift_index >= 0) && (begin_index + j + shift_index < sac_npts) ) {
+                        tmp1 = sign(allamp[i][begin_index+j+shift_index])*pow(fabs(allamp[i][begin_index+j+shift_index]),1./Nth_root)/count;
+                        beam[j] += tmp1;
+                    }
                     else beam[j] += 0.;
                 }
             }
             for ( j = 0; j < beam_npts; j ++ ) {
                 time = t1 + j * delta;
+                tmp2 = sign(beam[j])*pow(fabs(beam[j]), Nth_root);
+                beam[j] = tmp2;
+                if ( peak < fabs(beam[j]) ) peak = fabs(beam[j]);
                 fprintf(fout,"%f %f %f\n", time, slow_scan, fabs(beam[j]));
             }
+            sprintf(ch,"%d",cc);
+            strcat(ch,".sac");
+            hd.b = t1; hd.e = t2; hd.delta = delta; hd.npts = beam_npts;
+            write_sac(ch,hd,beam);
+            cc += 1;
             slow_scan += slow_step;
         }
     /*----------------------------------------------------Scanning slowness:save plot script in file "plot.sh"--------------------------------------*/
     fprintf(fp,"R=%f/%f/%f/%f\n", t1, t2, slow_low, slow_high);
     fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
-    fprintf(fp,"gmt surface %s -R$R -I%f/%f -G%s.grd\n", argv[12], delta*10, slow_step/2, argv[12]);
-    fprintf(fp,"gmt grd2cpt %s.grd -Cjet -Z>tmp.cpt\n", argv[12]);
+    fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
+    fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, slow_step/2, argv[12]);
+    fprintf(fp,"gmt makecpt -Cjet -T0/1./0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
     fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Slowness(sec/deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), slow_high/10);
-    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.4:\"Spectral Power\":>>$PS\n");
+    fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.1:\"Normalized Spectral Power\":>>$PS\n");
     fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n"); fprintf(fp,"ps2pdf $PS $PDF\n");
     fprintf(fp,"gmt psconvert -Tg -A -P $PS\n");
     fprintf(fp,"rm tmp.* gmt.*\n"); fprintf(fp,"evince $PDF\n");
