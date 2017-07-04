@@ -31,7 +31,7 @@ float sign( float x ) {
 
 /*----------------------------------------------------------------------------MAIN PROGRAM-------------------------------------------------------------------*/
 int main( int argc, char *argv[] ) {
-    int i, j, size = 256, sac_npts, shift_index, count = 0, sta_index = 0, begin_index, end_index, beam_npts, cc = 0;
+    int i, j, size = 256, sac_npts, shift_index, count = 0, sta_index = 0, begin_index, end_index, beam_npts;
     float *data, t1, t2, f1, f2, Nth_root, time, center_lon = 0., center_lat = 0., dx, dy, shift_time, delta,\
           time_start, time_end, **allamp, **coordi, *beam, peak = 0., tmp1, tmp2;
     SACHEAD hd;
@@ -171,11 +171,6 @@ int main( int argc, char *argv[] ) {
                 if ( peak < fabs(beam[j]) ) peak = fabs(beam[j]);
                 fprintf(fout,"%f %f %f\n", time, slow_scan, fabs(beam[j]));
             }
-            sprintf(ch,"%d",cc);
-            strcat(ch,".sac");
-            hd.b = t1; hd.e = t2; hd.delta = delta; hd.npts = beam_npts;
-            write_sac(ch,hd,beam);
-            cc += 1;
             slow_scan += slow_step;
         }
     /*----------------------------------------------------Scanning slowness:save plot script in file "plot.sh"--------------------------------------*/
