@@ -136,7 +136,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, baz_step/2, argv[12]);
     fprintf(fp,"gmt makecpt -Cjet -T0/1.0/0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
-    fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Backazimuth(deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), baz_high/10);
+    fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Backazimuth(deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), (baz_high-baz_low)/10.);
     fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.1:\"Normalized Spectral Power\":>>$PS\n");
     fprintf(fp,"gmt psxy -R -J -O -T>>$PS\nps2pdf $PS $PDF\n");
     fprintf(fp,"gmt psconvert -Tg -A -P $PS\n");
@@ -180,7 +180,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, slow_step/2, argv[12]);
     fprintf(fp,"gmt makecpt -Cjet -T0/1./0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
-    fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Slowness(sec/deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), slow_high/10);
+    fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Slowness(sec/deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), (slow_high-slow_low)/10.);
     fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.1:\"Normalized Spectral Power\":>>$PS\n");
     fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n"); fprintf(fp,"ps2pdf $PS $PDF\n");
     fprintf(fp,"gmt psconvert -Tg -A -P $PS\n");
