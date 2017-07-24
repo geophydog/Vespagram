@@ -125,7 +125,7 @@ int main( int argc, char *argv[] ) {
                 tmp2 = sign(beam[j])*pow(fabs(beam[j]),Nth_root);
                 beam[j] = tmp2;
                 if ( peak < fabs(beam[j]) ) peak = fabs(beam[j]);
-                fprintf(fout, "%f %f %f\n", time, baz_scan, fabs(beam[j]));
+                fprintf(fout, "%f %f %f\n", time, baz_scan, beam[j]);
             }
             baz_scan += baz_step;
         }
@@ -134,7 +134,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
     fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, baz_step/2, argv[12]);
-    fprintf(fp,"gmt makecpt -Cjet -T0/1.0/0.01 -Z>tmp.cpt\n");
+    fprintf(fp,"gmt makecpt -Cbr.cpt -T-1/1.0/0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
     fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Backazimuth(deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), (baz_high-baz_low)/10.);
     fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.1:\"Normalized Spectral Power\":>>$PS\n");
@@ -169,7 +169,7 @@ int main( int argc, char *argv[] ) {
                 tmp2 = sign(beam[j])*pow(fabs(beam[j]), Nth_root);
                 beam[j] = tmp2;
                 if ( peak < fabs(beam[j]) ) peak = fabs(beam[j]);
-                fprintf(fout,"%f %f %f\n", time, slow_scan, fabs(beam[j]));
+                fprintf(fout,"%f %f %f\n", time, slow_scan, beam[j]);
             }
             slow_scan += slow_step;
         }
@@ -178,7 +178,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
     fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, slow_step/2, argv[12]);
-    fprintf(fp,"gmt makecpt -Cjet -T0/1./0.01 -Z>tmp.cpt\n");
+    fprintf(fp,"gmt makecpt -Cbr.cpt -T-1/1./0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
     fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Slowness(sec/deg)\" -BWSen -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), (slow_high-slow_low)/10.);
     fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/12/0.8 -Ba0.1:\"Normalized Spectral Power\":>>$PS\n");
