@@ -136,7 +136,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"gmt gmtset FONT_TITLE 30,27,black\n");
     fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, baz_step/2, argv[12]);
-    fprintf(fp,"gmt makecpt -Cbr.cpt -T-1/1.0/0.01 -Z>tmp.cpt\n");
+    fprintf(fp,"gmt makecpt -Cpolar.cpt -T-1/1.0/0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
     fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Backazimuth(deg)\" -BWSen+t\"Fixed slowness sec/deg%.3f\" -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), (baz_high-baz_low)/10.,slowness);
     fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/15.1/1 -Bx0.2+l\"Normalized Spectral Power\">>$PS\n");
@@ -182,7 +182,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"gmt gmtset FONT_TITLE 30,27,black\n");
     fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, slow_step/2, argv[12]);
-    fprintf(fp,"gmt makecpt -Cbr.cpt -T-1/1./0.01 -Z>tmp.cpt\n");
+    fprintf(fp,"gmt makecpt -Cpolar.cpt -T-1/1./0.01 -Z>tmp.cpt\n");
     fprintf(fp,"gmt psxy -R$R -J$J -K -T>$PS\n");
     fprintf(fp,"gmt grdimage %s.grd -R -J -K -O -Bx%d+l\"Time(sec)\" -By%f+l\"Slowness(sec/deg)\" -BWSen+t\"Fixed back-azimuth %.2f deg\" -Ctmp.cpt>>$PS\n", argv[12], (int)((t2-t1)/10), (slow_high-slow_low)/10., backazimuth);
     fprintf(fp,"gmt psscale -Ctmp.cpt -R -J -K -O -D9.4i/3i/15.1/1 -Bx0.2+l\"Normalized Spectral Power\">>$PS\n");
