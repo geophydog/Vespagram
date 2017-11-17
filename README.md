@@ -4,7 +4,7 @@
 - [x] SAC(Seismic Analysis Code, here, version 101.6a)
 - [x] GMT(The Generic Mapping Tools, here version 5.3.1)
 # Installation
-- [x] After downloading the C programming source code just run "make" to compile it. you will get the executable binary file "vespa", and copy it in your bin directory.
+- [x] After downloading the C programming source code just run "make" to compile it, and you will get the executable binary file "vespa", and copy it in your bin directory.
 # Contribution
 - [x] Athor: Xuping Feng
 - [x] Email: geophydogvon@gmail.com.
