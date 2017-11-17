@@ -8,4 +8,4 @@
 # Contribution
 - [x] Athor: Xuping Feng
 - [x] Email: geophydogvon@gmail.com.
-- [x] Now organize and modified it I do only, and I do hope someone fork it, more valuablly, contribute you code
+- [x] Now organize and modified it I do only, and I do hope someone fork it, more valuablly, contribute your code
