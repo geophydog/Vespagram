@@ -1,6 +1,8 @@
 # Vespagram
 - [x] To execute velocity spectrum analysis (VESPAGRAM or VESPA)
+![results](https://github.com/geophydog/Vespagram/blob/master/images/results.jpg)
 # Dependencies
+- [x] Linux or Mac OS platform
 - [x] SAC(Seismic Analysis Code, here, version 101.6a)
 - [x] GMT(The Generic Mapping Tools, here version 5.3.1)
 # Installation
