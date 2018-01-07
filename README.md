@@ -57,7 +57,7 @@ vespa sacfile.lst t1 t2 fre_low fre_high ID<baz/slow> baz/slow slow_low/baz_low 
    ![SAC](https://github.com/geophydog/Vespagram/blob/master/images/SAC.jpg)
     
 ### :three: Find the back-azimuth with beam-forming method
-    - [Beam-forming](https://github.com/geophydog/Beamforming_in_time_domain)
+   - [Beam-forming](https://github.com/geophydog/Beamforming_in_time_domain)
    ![BAZ](https://github.com/geophydog/Vespagram/blob/master/images/BEAM-FORMING.jpg)
   _Its back-azimuth is about 116 degrees_
 
