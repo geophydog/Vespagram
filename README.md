@@ -51,18 +51,18 @@ vespa sacfile.lst t1 t2 fre_low fre_high ID<baz/slow> baz/slow slow_low/baz_low 
 
 # Example
 ### :one: The seismic stations mapping of this array.
-    ![STATIONS](https://github.com/geophydog/Vespagram/blob/master/images/STA.jpg)
+   ![STATIONS](https://github.com/geophydog/Vespagram/blob/master/images/STA.jpg)
     
 ### :two: SAC format data recorded by this seismic array.
-    ![SAC](https://github.com/geophydog/Vespagram/blob/master/images/SAC.jpg)
+   ![SAC](https://github.com/geophydog/Vespagram/blob/master/images/SAC.jpg)
     
 ### :three: Find the back-azimuth with beam-forming method
     - [Beam-forming](https://github.com/geophydog/Beamforming_in_time_domain)
-    ![BAZ](https://github.com/geophydog/Vespagram/blob/master/images/BEAM-FORMING.jpg)
+   ![BAZ](https://github.com/geophydog/Vespagram/blob/master/images/BEAM-FORMING.jpg)
   _Its back-azimuth is about 116 degrees_
 
 ### :four: Fix the back-azimuth with 116 degrees and scan horizontal slowness or ray parameters.
-    ![RESULTS](https://github.com/geophydog/Vespagram/blob/master/images/results.jpg)
+   ![RESULTS](https://github.com/geophydog/Vespagram/blob/master/images/results.jpg)
 
 ***
 
