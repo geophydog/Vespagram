@@ -134,6 +134,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
     fprintf(fp,"gmt gmtset FONT_LABEL 25,5,black\n");
     fprintf(fp,"gmt gmtset FONT_TITLE 30,5,black\n");
+    fprintf(fp,"gmt gmtset FONT_ANNOT_PRIMARY 15,5,black\n");
     fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, baz_step/2, argv[12]);
     fprintf(fp,"gmt makecpt -Cpolar.cpt -T-1/1.0/0.01 -Z>tmp.cpt\n");
