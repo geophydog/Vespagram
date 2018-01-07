@@ -178,7 +178,7 @@ int main( int argc, char *argv[] ) {
     /*----------------------------------------------------Scanning slowness:save plot script in file "plot.sh"--------------------------------------*/
     fprintf(fp,"R=%f/%f/%f/%f\n", t1, t2, slow_low, slow_high);
     fprintf(fp,"J=X9i/6i\nPS=%f~%f.ps\nPDF=%f~%f.pdf\n", t1, t2, t1, t2);
-    frpintf(fp,"gmt gmtset FONT_LABEL 25,5,black\n");
+    fprintf(fp,"gmt gmtset FONT_LABEL 25,5,black\n");
     fprintf(fp,"gmt gmtset FONT_TITLE 30,5,black\n");
     fprintf(fp,"awk '{print $1,$2,$3/%f}' %s >tmp.txt\n", peak, argv[12]);
     fprintf(fp,"gmt surface tmp.txt -R$R -I%f/%f -G%s.grd\n", delta*10, slow_step/2, argv[12]);
