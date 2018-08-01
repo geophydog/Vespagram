@@ -2,6 +2,10 @@
 
 ***
 
+# NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY, TO THE EXTEND PERMITED BY LAW!
+
+***
+
 # Vespagram
 - To execute velocity spectrum analysis (VESPAGRAM or VESPA)
 
