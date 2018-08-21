@@ -24,7 +24,7 @@ _Rost S, Thomas C (2002) Array seismology: methods and applications. Rev Geophys
 ***
 
 # Installation
-- After downloading the C programming source code just run "make" to compile it, and you will get the executable binary file "vespa", and copy it in your bin directory.
+- After downloading the C programming source code just run "make" to compile it, and you will get the executable binary file "vespa", and copy it in your bin directory if you wish.
 
 ***
 
